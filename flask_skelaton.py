@@ -1,3 +1,4 @@
+import utils
 from flask import Flask, request
 app = Flask(__name__)
 
@@ -15,10 +16,12 @@ def requestAllCustomer():
 @app.route('/customer')
 def requestCustomerData():
     if("id" in request.args):
-        customerId = request.args.get("id")
-        return ("selected a customer " + customerId) 
+        customerID = request.args.get("id")
+        payload = utils.formatReturnPayload(200, "selected a customer " + customerID)
+        return(payload) 
     else:
-        return("Customer ID not found")
+        payload = utils.formatReturnPayload(400, "Customer ID not found")
+        return(payload)
 
 @app.route('/films')
 def requestFilmsAvailable():
@@ -28,9 +31,11 @@ def requestFilmsAvailable():
 def requestFilmData():
     if("id" in request.args):
         filmId = request.args.get("id")
-        return("selected a film " + filmId) 
+        payload = utils.formatReturnPayload(200, "selected a film " + filmId)
+        return(payload) 
     else:
-        return("Film ID not found")
+        payload = utils.formatReturnPayload(400,"Film ID not found")
+        return(payload)
    
 
 if __name__ == '__main__':
