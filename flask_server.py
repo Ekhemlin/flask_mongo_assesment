@@ -2,11 +2,17 @@ import pymongo
 from flask import Flask, request
 import utils
 import customers
-import filmsRequest
+import films
+from dotenv import load_dotenv
 
 app = Flask(__name__)
+load_dotenv()
 
-client = pymongo.MongoClient("mongodb+srv://eitan:eitan@cluster0.auufom8.mongodb.net/?retryWrites=true&w=majority")
+mongo_url = os.getenv('MONGO_URL')
+if(not mongo_url):
+    print("Please get the mongo URL from Eitan")
+
+client = pymongo.MongoClient(mongo_url)
 mydb = client["imperva_db"]
 customers_collection = mydb["customers"]
 movies_collection = mydb["rentals"]
@@ -40,7 +46,7 @@ def requestCustomerData():
 @app.route('/films')
 def requestFilmsAvailable():
     try:
-        filmsList, status = filmsRequest.getAllFilms(mydb)
+        filmsList, status = films.getAllFilms(mydb)
         payload = utils.formatReturnPayload(status, filmsList)
     except Exception as e:
         print(e)
@@ -52,7 +58,7 @@ def requestFilmsAvailable():
 def requestFilmData():
     if("id" in request.args):
         filmId = request.args.get("id")
-        filmBody, status = filmsRequest.getFilmWithID(mydb, filmId)
+        filmBody, status = films.getFilmWithID(mydb, filmId)
         payload = utils.formatReturnPayload(status, filmBody)
         return(payload) 
     else:
