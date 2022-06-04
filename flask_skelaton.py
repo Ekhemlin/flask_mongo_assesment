@@ -1,7 +1,15 @@
-import utils
+import pymongo
 from flask import Flask, request
+import utils
+import customers
+import filmsRequest
+
 app = Flask(__name__)
 
+client = pymongo.MongoClient("mongodb+srv://eitan:eitan@cluster0.auufom8.mongodb.net/?retryWrites=true&w=majority")
+mydb = client["imperva_db"]
+customers_collection = mydb["customers"]
+movies_collection = mydb["rentals"]
 
 @app.route('/')
 def hello_world():
@@ -10,8 +18,14 @@ def hello_world():
 
 @app.route('/customers')
 def requestAllCustomer():
-   return "All customers"
-
+    try:
+        customersList = customers.getAllCustomers(customers_collection)
+        payload = utils.formatReturnPayload(200, customersList)
+    except Exception as e:
+        print(e)
+        payload = utils.formatReturnPayload(500, "Customers could not be retrieved")
+    finally:
+        return(payload)
 
 @app.route('/customer')
 def requestCustomerData():
@@ -25,7 +39,14 @@ def requestCustomerData():
 
 @app.route('/films')
 def requestFilmsAvailable():
-   return "list of avilable films"
+    try:
+        filmsList = filmsRequest.getAllFilms(movies_collection)
+        payload = utils.formatReturnPayload(200, filmsList)
+    except Exception as e:
+        print(e)
+        payload = utils.formatReturnPayload(500, "Films could not be retrieved")
+    finally:
+        return(payload)
    
 @app.route('/film')
 def requestFilmData():
