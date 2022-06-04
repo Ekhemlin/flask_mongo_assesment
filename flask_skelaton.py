@@ -15,15 +15,14 @@ movies_collection = mydb["rentals"]
 def hello_world():
    return "Hello World"
 
-
 @app.route('/customers')
 def requestAllCustomer():
     try:
-        customersList = customers.getAllCustomers(customers_collection)
-        payload = utils.formatReturnPayload(200, customersList)
+        customersList,status = customers.getAllCustomers(mydb)
+        payload = utils.formatReturnPayload(status, customersList)
     except Exception as e:
         print(e)
-        payload = utils.formatReturnPayload(500, "Customers could not be retrieved")
+        payload = utils.formatReturnPayload(status, "Customers could not be retrieved")
     finally:
         return(payload)
 
@@ -31,7 +30,6 @@ def requestAllCustomer():
 def requestCustomerData():
     if("id" in request.args):
         customerID = request.args.get("id")
-        #just pass client
         customer_body, status = customers.getCustomerWithId(mydb, customerID)
         payload = utils.formatReturnPayload(status, customer_body)
         return(payload) 
@@ -42,8 +40,8 @@ def requestCustomerData():
 @app.route('/films')
 def requestFilmsAvailable():
     try:
-        filmsList = filmsRequest.getAllFilms(movies_collection)
-        payload = utils.formatReturnPayload(200, filmsList)
+        filmsList, status = filmsRequest.getAllFilms(mydb)
+        payload = utils.formatReturnPayload(status, filmsList)
     except Exception as e:
         print(e)
         payload = utils.formatReturnPayload(500, "Films could not be retrieved")
@@ -54,7 +52,8 @@ def requestFilmsAvailable():
 def requestFilmData():
     if("id" in request.args):
         filmId = request.args.get("id")
-        payload = utils.formatReturnPayload(200, "selected a film " + filmId)
+        filmBody, status = filmsRequest.getFilmWithID(mydb, filmId)
+        payload = utils.formatReturnPayload(status, filmBody)
         return(payload) 
     else:
         payload = utils.formatReturnPayload(400,"Film ID not found")

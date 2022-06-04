@@ -1,0 +1,3 @@
+ENV FILE
+better handling of id conversion to ints 
+proper dynamodb connection handling / reconnecting if issues 

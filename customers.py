@@ -2,14 +2,19 @@ import pymongo
 import datetime
 import utils
 
-def getAllCustomers(customers_collection):
-    customers = customers_collection.find()
-    retList = []
-    for c in customers:
-        c_obj = {"First Name" : c["First Name"], "Last Name" : c["Last Name"], "id" : c["_id"]}
-        retList.append(c_obj)
-    print(retList)
-    return(retList)
+def getAllCustomers(client):
+    try:
+        customers_collection = client["customers"]
+        customers = customers_collection.find()
+        retList = []
+        for c in customers:
+            c_obj = {"First Name" : c["First Name"], "Last Name" : c["Last Name"], "id" : c["_id"]}
+            retList.append(c_obj)
+        return(retList, 200)
+    except Exception as e:
+        print(e)
+        return("Customers could not be retrieved", 500) 
+
 
 
 def getCustomerWithId(client, customerId):
@@ -21,7 +26,6 @@ def getCustomerWithId(client, customerId):
         customer = customers_collection.find_one(myquery)
         if customer is None:
             return("customer not found", 400)
-        print(customer)
         info = {"First Name" : customer["First Name"], "Last Name" : customer["Last Name"], 
             "Address" : customer["Address"], "City" : customer["City"], "Country" : customer["Country"], 
             "District" : customer["District"], "Phone" : customer["Phone"]}
@@ -42,4 +46,13 @@ def getCustomerWithId(client, customerId):
         return(ret, 200)
     except Exception as e:
         print(e)
-        return("Customer could not be retrieved", 500) #return status code from here
+        return("Customer could not be retrieved", 500) 
+
+def _getRentersForFilmTitle(client, title):
+    customers_collection = client["customers"]
+    try:
+        renters = list(customers_collection.find({"Rentals" : {"$elemMatch" : {"Film Title" : title}}}, 
+                                                {"First Name" : 1, "Last Name" : 1, "_id" : 1}))
+        return(renters)
+    except Exception as e:
+        return("Couldn't be found")
