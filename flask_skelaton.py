@@ -31,7 +31,9 @@ def requestAllCustomer():
 def requestCustomerData():
     if("id" in request.args):
         customerID = request.args.get("id")
-        payload = utils.formatReturnPayload(200, "selected a customer " + customerID)
+        #just pass client
+        customer_body, status = customers.getCustomerWithId(mydb, customerID)
+        payload = utils.formatReturnPayload(status, customer_body)
         return(payload) 
     else:
         payload = utils.formatReturnPayload(400, "Customer ID not found")
