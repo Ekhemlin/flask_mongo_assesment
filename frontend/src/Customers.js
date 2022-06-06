@@ -64,8 +64,13 @@ function Customers() {
         <div className="App">
             <header className="App-header">
                 {isCustomerOpen && <div>
-                    <p>Customer data</p>
-                    <p>{JSON.stringify(customerData)}</p>
+                    <div>
+                        <h1>{`${customerData["First Name"]} ${customerData["Last Name"]}`}</h1>
+                        <h4>{`Address: ${customerData["Address"]}, ${customerData["City"]}, ${customerData["Country"]}`}</h4>
+                        <h4>Phone number: {customerData["Phone"]}</h4>
+
+                    </div>
+                    <h2>Rented movies:</h2>
                     {customerRentals.map(rental => <li key={rental["Film Title"]}>
                         {`${rental["Film Title"]} rented for \$${parseFloat(rental["Cost"]).toFixed(2)} for ${rental["Rented For"]["days"]} days`}
                         </li>)}

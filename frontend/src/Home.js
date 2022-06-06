@@ -60,12 +60,16 @@ function Home() {
         <div className="App">
             <header className="App-header">
                 {isFilmOpen && <div>
-                    <p>Film data</p>
-                    <p>{JSON.stringify(filmData)}</p>
+                    <div>
+                        <h2>{filmData["Title"]}</h2>
+                        <h3>Category: {filmData["Category"]}</h3>
+                        <h3>Rating: {filmData["Rating"]}</h3>
+                        <p>{filmData["Description"]}</p>
+                    </div>
                     {filmRenters.map(renter => <li key={renter["First Name"]}>
                         {`${renter["First Name"]} ${renter["Last Name"]} rented this movie`}
-                        </li>)}
-                        <button id="clearFilmData" onClick={() => clearFilmData()}>Back to customer list</button>
+                    </li>)}
+                    <button id="clearFilmData" onClick={() => clearFilmData()}>Back to film list</button>
                 </div>}
                 {!isFilmOpen &&
                     <div>

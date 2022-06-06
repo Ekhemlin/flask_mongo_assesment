@@ -1,3 +1,12 @@
-- Better handling of id conversion to ints 
+Improvements to project
+
+Backend: 
+
+- Better handling of conversion of request args to ints 
 - Proper dynamodb connection handling / reconnecting when experiencing issues 
 - Basic API tests
+- Speed up mongo queries 
+
+Frontend: 
+
+- Handling of various errors from the API 
