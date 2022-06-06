@@ -5,7 +5,7 @@ import utils
 def getAllCustomers(client):
     try:
         customers_collection = client["customers"]
-        customers = customers_collection.find()
+        customers = customers_collection.find().sort("_id",1)
         retList = []
         for c in customers:
             c_obj = {"First Name" : c["First Name"], "Last Name" : c["Last Name"], "id" : c["_id"]}

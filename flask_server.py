@@ -3,6 +3,7 @@ from flask import Flask, request
 import utils
 import customers
 import films
+import os
 from dotenv import load_dotenv
 
 app = Flask(__name__)
@@ -25,11 +26,24 @@ def hello_world():
 def requestAllCustomer():
     try:
         customersList,status = customers.getAllCustomers(mydb)
-        payload = utils.formatReturnPayload(status, customersList)
+        originalLength = len(customersList)
+        if("batchSize" in request.args and "batchNumber" in request.args):
+            batchSize = int(request.args.get("batchSize"))
+            batchNumber = int(request.args.get("batchNumber"))
+            if(batchSize * batchNumber > len(customersList)):
+                return(formatReturnPayload(401, "Batch number or size is too large"))
+            if((batchSize+1) * batchNumber > len(customersList)):
+                customersList = customersList[batchSize*batchSize:]
+            else:
+                customersList = customersList[batchSize*batchNumber:(batchNumber+1)*batchSize]
+                body = {"Data" : customersList, "Batches" : originalLength//batchSize}
+        else:
+            body = {"Data" : customersList, "Batches" : None}
+        payload = utils.formatReturnPayload(status, body)
+        return(payload)
     except Exception as e:
         print(e)
-        payload = utils.formatReturnPayload(status, "Customers could not be retrieved")
-    finally:
+        payload = utils.formatReturnPayload(501, "Customers could not be retrieved")
         return(payload)
 
 @app.route('/customer')

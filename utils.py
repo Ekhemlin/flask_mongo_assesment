@@ -1,12 +1,20 @@
-from flask import jsonify
+import flask
+from flask import jsonify, make_response
 import datetime
 
 def formatReturnPayload(status, body):
     ret = {"Status": status, "Body": body}
     json_ret = jsonify(ret)
-    return(json_ret)
+    resp = flask.make_response(json_ret)
+    resp.headers['Access-Control-Allow-Origin'] = '*'
+    print(resp)
+    return resp
+
+    # return(json_ret)
 
 def get_rental_period(date1, date2):
+    if(not date1 or not date2):
+        return({"days": None, "hours" : None})
     date1 = date1.split('.')[0]
     date2 = date2.split('.')[0]
     start_rental = datetime.datetime.strptime(date1, "%Y-%m-%d %H:%M:%S")
