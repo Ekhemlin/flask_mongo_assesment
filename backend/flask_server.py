@@ -18,10 +18,6 @@ mydb = client["imperva_db"]
 customers_collection = mydb["customers"]
 movies_collection = mydb["rentals"]
 
-@app.route('/')
-def hello_world():
-   return "Hello World"
-
 @app.route('/customers')
 def requestAllCustomer():
     try:
@@ -43,7 +39,7 @@ def requestAllCustomer():
         return(payload)
     except Exception as e:
         print(e)
-        payload = utils.formatReturnPayload(501, "Customers could not be retrieved")
+        payload = utils.formatReturnPayload(500, "Customers could not be retrieved")
         return(payload)
 
 @app.route('/customer')
@@ -54,7 +50,7 @@ def requestCustomerData():
         payload = utils.formatReturnPayload(status, customer_body)
         return(payload) 
     else:
-        payload = utils.formatReturnPayload(400, "Customer ID not found")
+        payload = utils.formatReturnPayload(404, "Customer ID not found")
         return(payload)
 
 @app.route('/films')
@@ -89,7 +85,7 @@ def requestFilmData():
         payload = utils.formatReturnPayload(status, filmBody)
         return(payload) 
     else:
-        payload = utils.formatReturnPayload(400,"Film ID not found")
+        payload = utils.formatReturnPayload(404,"Film ID not found")
         return(payload)
    
 

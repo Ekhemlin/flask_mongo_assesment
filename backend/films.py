@@ -14,14 +14,14 @@ def getAllFilms(client):
         return(retList, 200)
     except Exception as e:
         print(e)
-        return("Films could not be retrieved", 500)
+        return("Could not retrieve film list", 500)
 
 def getFilmWithID(client, filmID):
     movies_collection = client["rentals"]
     try:
         movie = movies_collection.find_one({"_id": int(filmID)})
         if(movie is None):
-            return("Movie not found", 400)
+            return("Movie not found", 404)
         renters = customers._getRentersForFilmTitle(client, movie["Title"])
         m_obj = {"Title" : movie["Title"], "Category" : movie["Category"], "id" : movie["_id"],
             "Rating" : movie["Rating"], "Description" : movie["Description"],
@@ -29,6 +29,6 @@ def getFilmWithID(client, filmID):
         return({"info" : m_obj, "renters": renters}, 200)
     except Exception as e:
         print(e)
-        return("Could not retrieve movie", 500)
+        return("Could not retrieve film data", 500)
 
 

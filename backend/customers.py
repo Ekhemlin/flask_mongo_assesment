@@ -25,7 +25,7 @@ def getCustomerWithId(client, customerId):
         myquery = { "_id":  int(customerId) }
         customer = customers_collection.find_one(myquery)
         if customer is None:
-            return("customer not found", 400)
+            return("customer not found", 404)
         info = {"First Name" : customer["First Name"], "Last Name" : customer["Last Name"], 
             "Address" : customer["Address"], "City" : customer["City"], "Country" : customer["Country"], 
             "District" : customer["District"], "Phone" : customer["Phone"]}
@@ -46,7 +46,7 @@ def getCustomerWithId(client, customerId):
         return(ret, 200)
     except Exception as e:
         print(e)
-        return("Customer could not be retrieved", 500) 
+        return("Customer data could not be retrieved", 500) 
 
 def _getRentersForFilmTitle(client, title):
     customers_collection = client["customers"]
