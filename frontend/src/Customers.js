@@ -34,6 +34,7 @@ function Customers() {
     function clearUserData() {
         setCustomerData({});
         setIsCustomerOpen(false);
+        setCustomerRentals([]);
     }
 
     function fetchPrevBatch() {

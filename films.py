@@ -5,7 +5,7 @@ import customers
 def getAllFilms(client):
     try:
         movies_collection = client["rentals"]
-        movies = movies_collection.find()
+        movies = movies_collection.find().sort("_id",1)
         retList = []
         for m in movies:
             m_obj = {"Title" : m["Title"], "Category" : m["Category"], "id" : m["_id"],
@@ -24,9 +24,9 @@ def getFilmWithID(client, filmID):
             return("Movie not found", 400)
         renters = customers._getRentersForFilmTitle(client, movie["Title"])
         m_obj = {"Title" : movie["Title"], "Category" : movie["Category"], "id" : movie["_id"],
-            "Rating" : movie["Rating"], "Description" : movie["Description"], "Renters" : renters,
+            "Rating" : movie["Rating"], "Description" : movie["Description"],
             "Rental Duration" : movie["Rental Duration"]}
-        return(m_obj, 200)
+        return({"info" : m_obj, "renters": renters}, 200)
     except Exception as e:
         print(e)
         return("Could not retrieve movie", 500)

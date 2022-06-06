@@ -61,7 +61,20 @@ def requestCustomerData():
 def requestFilmsAvailable():
     try:
         filmsList, status = films.getAllFilms(mydb)
-        payload = utils.formatReturnPayload(status, filmsList)
+        originalLength = len(filmsList)
+        if("batchSize" in request.args and "batchNumber" in request.args):
+            batchSize = int(request.args.get("batchSize"))
+            batchNumber = int(request.args.get("batchNumber"))
+            if(batchSize * batchNumber > len(filmsList)):
+                return(formatReturnPayload(401, "Batch number or size is too large"))
+            if((batchSize+1) * batchNumber > len(filmsList)):
+                filmsList = filmsList[batchSize*batchSize:]
+            else:
+                filmsList = filmsList[batchSize*batchNumber:(batchNumber+1)*batchSize]
+                body = {"Data" : filmsList, "Batches" : originalLength//batchSize}
+        else:
+            body = {"Data" : filmsList, "Batches" : None}
+        payload = utils.formatReturnPayload(status, body)
     except Exception as e:
         print(e)
         payload = utils.formatReturnPayload(500, "Films could not be retrieved")
