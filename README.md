@@ -31,4 +31,4 @@ Todos / improvements for the projects can be found in `todo.txt`
 
 ## Demo video 
 
-A demo showing how to navigate the website can be found ![here](https://gfycat.com/givingregularavocet.gif)
+A demo showing how to navigate the website can be found [here](https://gfycat.com/givingregularavocet)
