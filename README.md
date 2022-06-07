@@ -5,7 +5,7 @@
 - Get the `.env` file from Eitan 
 - Place the `.env` file in `backend/`
 - Run `cd backend && python3 flask_server.py`
-- Run `cd ../frontend && npm start`
+- Run `cd frontend && npm start`
 
 ## Installing dependencies 
 
@@ -28,3 +28,7 @@ mongoimport "<Mongo  URL>" --db imperva_db --collection rentals --file data/DVDR
 
 Documentation for the REST API endpoints can be found in `backend/endpoints.md` 
 Todos / improvements for the projects can be found in `todo.txt`
+
+## Demo video 
+
+A demo showing how to navigate the website can be found ![here](https://gfycat.com/givingregularavocet)
